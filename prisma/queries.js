@@ -41,14 +41,40 @@ async function getLeaderboardEntries() {
   return allSessions;
 }
 
+async function checkCoords(characterName, coordsX, coordsY) {
+  const character = await prisma.character.findUnique({
+    where: {
+      name: characterName,
+    },
+  });
+  if (
+    character.posXMax >= coordsX &&
+    character.posXMin <= coordsX &&
+    character.posYMax >= coordsY &&
+    character.posYMin <= coordsY
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+async function getCharacters() {
+  const characters = await prisma.character.findMany();
+  console.log(characters);
+}
+
 // async function nukeLeaderboard() {
 //   await prisma.leaderboard.deleteMany();
 // }
 // nukeLeaderboard();
+
+// getCharacters();
 
 module.exports = {
   prisma,
   getLeaderboardEntries,
   startSession,
   finishSession,
+  checkCoords,
 };

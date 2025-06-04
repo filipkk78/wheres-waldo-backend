@@ -14,8 +14,18 @@ async function updateEntry(req, res) {
   res.json({ message: `Updated user with id ${req.body.id}` });
 }
 
+async function checkCharCoords(req, res) {
+  const result = await db.checkCoords(
+    req.body.characterName,
+    Number(req.body.coordsX),
+    Number(req.body.coordsY)
+  );
+  res.json({ result });
+}
+
 module.exports = {
   getLeaderboard,
   addEntry,
   updateEntry,
+  checkCharCoords,
 };
