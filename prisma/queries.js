@@ -3,35 +3,43 @@ const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function startSession(username) {
-  await prisma.leaderboard.create({
+  const entry = await prisma.leaderboard.create({
     data: {
       username,
     },
   });
+  return entry.id;
 }
 
 async function finishSession(id) {
+  const now = new Date();
   const desiredSession = await prisma.leaderboard.findUnique({
     where: {
       id,
     },
   });
+  const completionMiliseconds = now - desiredSession.startedAt;
+  const seconds = completionMiliseconds / 1000;
+  const mins = Math.floor(seconds / 60)
+    .toString()
+    .padStart(2, "0");
+  const leftoverSeconds = Math.round(seconds % 60)
+    .toString()
+    .padStart(2, "0");
+  const completionMinutes = `${mins}:${leftoverSeconds}`;
   await prisma.leaderboard.update({
     where: { id },
     data: {
-      completionTime: (new Date() - desiredSession.startedAt) / 100,
+      completionTimeMs: completionMiliseconds,
+      completionInterval: completionMinutes,
     },
   });
 }
 
-async function logSessions() {
+async function getLeaderboardEntries() {
   const allSessions = await prisma.leaderboard.findMany();
-  console.log(allSessions);
+  return allSessions;
 }
-
-// startSession("Skibidi");
-// finishSession("5de4e268-0856-47fb-a132-b739396c2261");
-// logSessions();
 
 // async function nukeLeaderboard() {
 //   await prisma.leaderboard.deleteMany();
@@ -40,4 +48,7 @@ async function logSessions() {
 
 module.exports = {
   prisma,
+  getLeaderboardEntries,
+  startSession,
+  finishSession,
 };

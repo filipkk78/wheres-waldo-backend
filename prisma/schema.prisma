@@ -24,9 +24,10 @@ model Character {
 }
 
 model Leaderboard {
-  id             String   @id @default(uuid())
-  username       String
-  startedAt      DateTime @default(now())
-  finishedAt     DateTime @updatedAt
-  completionTime Int      @default(0)
+  id                 String   @id @default(uuid())
+  username           String
+  startedAt          DateTime @default(now())
+  finishedAt         DateTime @updatedAt
+  completionTimeMs   Int      @default(0)
+  completionInterval String   @default("0")
 }
