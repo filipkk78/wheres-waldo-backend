@@ -37,7 +37,16 @@ async function finishSession(id) {
 }
 
 async function getLeaderboardEntries() {
-  const allSessions = await prisma.leaderboard.findMany();
+  const allSessions = await prisma.leaderboard.findMany({
+    where: {
+      completionTimeMs: {
+        not: 0,
+      },
+    },
+    orderBy: {
+      completionTimeMs: "asc",
+    },
+  });
   return allSessions;
 }
 
