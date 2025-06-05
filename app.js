@@ -17,7 +17,7 @@ app.use("/api", indexRouter);
 
 const PORT = 5000;
 app.listen(PORT, () => {
-  console.log(`Blog API running on port ${PORT}`);
+  console.log(`Where's Waldo API running on port ${PORT}`);
 });
 
 app.use((err, req, res, next) => {
