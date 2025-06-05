@@ -5,8 +5,12 @@ async function getLeaderboard(req, res) {
 }
 
 async function addEntry(req, res) {
-  const userId = await db.startSession(req.body.username);
-  res.json({ message: `Added user with id`, id: userId });
+  const user = await db.startSession(req.body.username);
+  res.json({
+    message: `Added user with id`,
+    id: user.id,
+    startedAt: user.startedAt,
+  });
 }
 
 async function updateEntry(req, res) {

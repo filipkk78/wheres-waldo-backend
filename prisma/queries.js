@@ -8,7 +8,7 @@ async function startSession(username) {
       username,
     },
   });
-  return entry.id;
+  return { id: entry.id, startedAt: entry.startedAt };
 }
 
 async function finishSession(id) {
